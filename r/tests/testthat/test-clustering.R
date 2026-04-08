@@ -74,6 +74,15 @@ test_that("igraph clustering doesn't crash", {
     expect_no_condition(cluster_graph_louvain(graph))
 })
 
+test_that("knn_hnsw rownames come from query", {
+    skip_if_not_installed("RcppHNSW")
+    data <- matrix(rnorm(200), nrow=20, dimnames=list(paste0("data_", 1:20)))
+    query <- matrix(rnorm(50), nrow=5, dimnames=list(paste0("query_", 1:5)))
+    res <- knn_hnsw(data, query=query, k=3, verbose=FALSE)
+    expect_equal(rownames(res$idx), rownames(query))
+    expect_equal(rownames(res$dist), rownames(query))
+})
+
 test_that("cluster_cells_graph works", {
     skip_if_not_installed("RcppAnnoy")
     skip_if_not_installed("RcppHNSW")
