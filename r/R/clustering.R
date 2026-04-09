@@ -387,8 +387,8 @@ knn_hnsw <- function(data, query = NULL, k = 10, metric = c("euclidean", "cosine
     }
   }
 
-  rownames(res$idx) <- rownames(data)
-  rownames(res$dist) <- rownames(data)
+  rownames(res$idx) <- rownames(query)
+  rownames(res$dist) <- rownames(query)
   return(res)
 }
 
