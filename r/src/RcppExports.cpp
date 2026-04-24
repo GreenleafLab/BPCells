@@ -2212,6 +2212,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// iterate_matrix_add_uint32_t_cpp
+SEXP iterate_matrix_add_uint32_t_cpp(SEXP left, SEXP right);
+RcppExport SEXP _BPCells_iterate_matrix_add_uint32_t_cpp(SEXP leftSEXP, SEXP rightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type left(leftSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type right(rightSEXP);
+    rcpp_result_gen = Rcpp::wrap(iterate_matrix_add_uint32_t_cpp(left, right));
+    return rcpp_result_gen;
+END_RCPP
+}
+// iterate_matrix_add_float_cpp
+SEXP iterate_matrix_add_float_cpp(SEXP left, SEXP right);
+RcppExport SEXP _BPCells_iterate_matrix_add_float_cpp(SEXP leftSEXP, SEXP rightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type left(leftSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type right(rightSEXP);
+    rcpp_result_gen = Rcpp::wrap(iterate_matrix_add_float_cpp(left, right));
+    return rcpp_result_gen;
+END_RCPP
+}
+// iterate_matrix_add_double_cpp
+SEXP iterate_matrix_add_double_cpp(SEXP left, SEXP right);
+RcppExport SEXP _BPCells_iterate_matrix_add_double_cpp(SEXP leftSEXP, SEXP rightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type left(leftSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type right(rightSEXP);
+    rcpp_result_gen = Rcpp::wrap(iterate_matrix_add_double_cpp(left, right));
+    return rcpp_result_gen;
+END_RCPP
+}
 // iterate_matrix_mask_uint32_t_cpp
 SEXP iterate_matrix_mask_uint32_t_cpp(SEXP mat, SEXP mask, bool invert);
 RcppExport SEXP _BPCells_iterate_matrix_mask_uint32_t_cpp(SEXP matSEXP, SEXP maskSEXP, SEXP invertSEXP) {
@@ -2732,6 +2768,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BPCells_iterate_matrix_multiply_uint32_t_cpp", (DL_FUNC) &_BPCells_iterate_matrix_multiply_uint32_t_cpp, 2},
     {"_BPCells_iterate_matrix_multiply_float_cpp", (DL_FUNC) &_BPCells_iterate_matrix_multiply_float_cpp, 2},
     {"_BPCells_iterate_matrix_multiply_double_cpp", (DL_FUNC) &_BPCells_iterate_matrix_multiply_double_cpp, 2},
+    {"_BPCells_iterate_matrix_add_uint32_t_cpp", (DL_FUNC) &_BPCells_iterate_matrix_add_uint32_t_cpp, 2},
+    {"_BPCells_iterate_matrix_add_float_cpp", (DL_FUNC) &_BPCells_iterate_matrix_add_float_cpp, 2},
+    {"_BPCells_iterate_matrix_add_double_cpp", (DL_FUNC) &_BPCells_iterate_matrix_add_double_cpp, 2},
     {"_BPCells_iterate_matrix_mask_uint32_t_cpp", (DL_FUNC) &_BPCells_iterate_matrix_mask_uint32_t_cpp, 3},
     {"_BPCells_iterate_matrix_mask_float_cpp", (DL_FUNC) &_BPCells_iterate_matrix_mask_float_cpp, 3},
     {"_BPCells_iterate_matrix_mask_double_cpp", (DL_FUNC) &_BPCells_iterate_matrix_mask_double_cpp, 3},

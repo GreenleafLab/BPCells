@@ -12,6 +12,7 @@
 #include <RcppEigen.h>
 #include "bpcells-cpp/matrixIterators/CSparseMatrix.h"
 #include "bpcells-cpp/matrixIterators/ColwiseRank.h"
+#include "bpcells-cpp/matrixIterators/MatrixAddition.h"
 #include "bpcells-cpp/matrixIterators/ConcatenateMatrix.h"
 #include "bpcells-cpp/matrixIterators/Mask.h"
 #include "bpcells-cpp/matrixIterators/MatrixIndexSelect.h"
@@ -275,6 +276,30 @@ SEXP iterate_matrix_multiply_float_cpp(SEXP left, SEXP right) {
 SEXP iterate_matrix_multiply_double_cpp(SEXP left, SEXP right) {
     return make_unique_xptr<SparseMultiply<double>>(
         take_unique_xptr<MatrixLoader<double>>(left), take_unique_xptr<MatrixLoader<double>>(right)
+    );
+}
+
+// [[Rcpp::export]]
+SEXP iterate_matrix_add_uint32_t_cpp(SEXP left, SEXP right) {
+    return make_unique_xptr<MatrixAddition<uint32_t>>(
+        take_unique_xptr<MatrixLoader<uint32_t>>(left),
+        take_unique_xptr<MatrixLoader<uint32_t>>(right)
+    );
+}
+
+// [[Rcpp::export]]
+SEXP iterate_matrix_add_float_cpp(SEXP left, SEXP right) {
+    return make_unique_xptr<MatrixAddition<float>>(
+        take_unique_xptr<MatrixLoader<float>>(left),
+        take_unique_xptr<MatrixLoader<float>>(right)
+    );
+}
+
+// [[Rcpp::export]]
+SEXP iterate_matrix_add_double_cpp(SEXP left, SEXP right) {
+    return make_unique_xptr<MatrixAddition<double>>(
+        take_unique_xptr<MatrixLoader<double>>(left),
+        take_unique_xptr<MatrixLoader<double>>(right)
     );
 }
 
