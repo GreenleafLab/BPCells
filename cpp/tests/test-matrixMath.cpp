@@ -18,6 +18,7 @@
 #include <matrixIterators/MatrixIndexSelect.h>
 #include <matrixIterators/MatrixIterator.h>
 #include <matrixIterators/StoredMatrix.h>
+#include <matrixIterators/MatrixAddition.h>
 
 #include <matrixTransforms/Log1p.h>
 #include <matrixTransforms/Pow.h>
@@ -411,4 +412,22 @@ TEST(MatrixMath, Shift) {
     r2.write(*mat);
 
     EXPECT_TRUE(MatrixXd(r2.getMat()).isApprox(ans2));
+}
+
+TEST(MatrixMath, Add) {
+    SparseMatrix<double> m1 = generate_mat(100, 50, 125123);
+    SparseMatrix<double> m2 = generate_mat(100, 50, 999777);
+    MatrixXd ans = MatrixXd(m1) + MatrixXd(m2);
+
+    MatrixAddition<double> add(
+        std::make_unique<CSparseMatrix<double>>(get_map(m1)),
+        std::make_unique<CSparseMatrix<double>>(get_map(m2))
+    );
+
+    checkMultiplyOps(add, ans);
+
+    CSparseMatrixWriter<double> res;
+    add.restart();
+    res.write(add);
+    EXPECT_TRUE(MatrixXd(res.getMat()).isApprox(ans));
 }
