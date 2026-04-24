@@ -740,7 +740,7 @@ setMethod("*", signature(e1 = "numeric", e2 = "IterableMatrix"), function(e1, e2
 #' mat + 1:nrow(mat)
 #' 
 #' ## Element-wise addition of two IterableMatrix objects
-#' mat1 + mat2
+#' mat + (mat * 2)
 #'
 setMethod("+", signature(e1 = "IterableMatrix", e2 = "numeric"), function(e1, e2) {
   if (all(e2 == 0)) return(e1)
@@ -761,10 +761,10 @@ setMethod("+", signature(e1 = "IterableMatrix", e2 = "IterableMatrix"), function
   assert_true(nrow(e1) == nrow(e2) && ncol(e1) == ncol(e2))
 
   # If types are mismatched, default to double precision for both
-  type_x <- matrix_type(e1)
-  type_y <- matrix_type(e2)
-  if (type_x != type_y && type_x != "double") e1 <- convert_matrix_type(e1, "double")
-  if (type_x != type_y && type_y != "double") e2 <- convert_matrix_type(e2, "double")
+  type_e1 <- matrix_type(e1)
+  type_e2 <- matrix_type(e2)
+  if (type_e1 != type_e2 && type_e1 != "double") e1 <- convert_matrix_type(e1, "double")
+  if (type_e1 != type_e2 && type_e2 != "double") e2 <- convert_matrix_type(e2, "double")
 
   dim <- c(nrow(e1), ncol(e1))
   dimnames <- list(
