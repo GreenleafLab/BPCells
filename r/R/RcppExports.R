@@ -661,6 +661,18 @@ iterate_matrix_multiply_double_cpp <- function(left, right) {
     .Call(`_BPCells_iterate_matrix_multiply_double_cpp`, left, right)
 }
 
+iterate_matrix_add_uint32_t_cpp <- function(left, right) {
+    .Call(`_BPCells_iterate_matrix_add_uint32_t_cpp`, left, right)
+}
+
+iterate_matrix_add_float_cpp <- function(left, right) {
+    .Call(`_BPCells_iterate_matrix_add_float_cpp`, left, right)
+}
+
+iterate_matrix_add_double_cpp <- function(left, right) {
+    .Call(`_BPCells_iterate_matrix_add_double_cpp`, left, right)
+}
+
 iterate_matrix_mask_uint32_t_cpp <- function(mat, mask, invert) {
     .Call(`_BPCells_iterate_matrix_mask_uint32_t_cpp`, mat, mask, invert)
 }

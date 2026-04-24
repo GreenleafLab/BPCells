@@ -727,7 +727,8 @@ setMethod("*", signature(e1 = "numeric", e2 = "IterableMatrix"), function(e1, e2
   e2 <- wrapMatrix("TransformScaleShift", convert_matrix_type(e2, "double"))
   e2 * e1
 })
-#' @describeIn IterableMatrix-methods Add a constant, or row-wise addition with a vector length nrow(mat)
+#' @describeIn IterableMatrix-methods Add a constant, row-wise addition with a vector length nrow(mat),
+#'   or element-wise addition of two IterableMatrix objects
 #' @examples
 #' #######################################################################
 #' ## `e1 + e2` example
@@ -738,7 +739,9 @@ setMethod("*", signature(e1 = "numeric", e2 = "IterableMatrix"), function(e1, e2
 #' ## Adding row-wise by a vector of length `nrow(mat)`
 #' mat + 1:nrow(mat)
 #' 
-#' 
+#' ## Element-wise addition of two IterableMatrix objects
+#' mat1 + mat2
+#'
 setMethod("+", signature(e1 = "IterableMatrix", e2 = "numeric"), function(e1, e2) {
   if (all(e2 == 0)) return(e1)
   e1 <- wrapMatrix("TransformScaleShift", convert_matrix_type(e1, "double"))
@@ -748,6 +751,27 @@ setMethod("+", signature(e1 = "numeric", e2 = "IterableMatrix"), function(e1, e2
   if (all(e1 == 0)) return(e2)
   e2 <- wrapMatrix("TransformScaleShift", convert_matrix_type(e2, "double"))
   e2 + e1
+})
+setMethod("+", signature(e1 = "IterableMatrix", e2 = "IterableMatrix"), function(e1, e2) {
+  if (e1@transpose != e2@transpose) stop("Cannot add matrices with different internal transpose states.\nPlease use transpose_storage_order().")
+  if (e1@transpose) {
+    return(t(t(e1) + t(e2)))
+  }
+
+  assert_true(nrow(e1) == nrow(e2) && ncol(e1) == ncol(e2))
+
+  # If types are mismatched, default to double precision for both
+  type_x <- matrix_type(e1)
+  type_y <- matrix_type(e2)
+  if (type_x != type_y && type_x != "double") e1 <- convert_matrix_type(e1, "double")
+  if (type_x != type_y && type_y != "double") e2 <- convert_matrix_type(e2, "double")
+
+  dim <- c(nrow(e1), ncol(e1))
+  dimnames <- list(
+    merge_dimnames(rownames(e1), rownames(e2), "+", "row"),
+    merge_dimnames(colnames(e1), colnames(e2), "+", "column")
+  )
+  new("MatrixAddition", left = e1, right = e2, transpose = FALSE, dim = dim, dimnames = dimnames)
 })
 # Note: we skip numeric / IterableMatrix as it would result in a lot of infinities for dividing by 0.
 #' @describeIn IterableMatrix-methods Divide by a constant, or divide rows by a vector length nrow(mat)
