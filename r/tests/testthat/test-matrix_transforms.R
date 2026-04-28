@@ -8,7 +8,7 @@
 
 generate_sparse_matrix <- function(nrow, ncol, fraction_nonzero = 0.5, max_val = 10) {
   m <- matrix(rbinom(nrow * ncol, 1, fraction_nonzero) * sample.int(max_val, nrow * ncol, replace = TRUE), nrow = nrow)
-  as(m, "dgCMatrix")
+  as(Matrix::Matrix(m, sparse = TRUE), "dgCMatrix")
 }
 
 test_that("Subsetting transform works", {
@@ -383,4 +383,17 @@ test_that("matrix addition works", {
     # Dimension mismatch errors
     m3 <- generate_sparse_matrix(20, 11)
     expect_error(bp1 + as(m3, "IterableMatrix"))
+
+    # Zero cancellation: A + (A * -1) emits no explicit zeros
+    bp1_d <- convert_matrix_type(bp1, "double")
+    neg1 <- bp1_d * -1
+    res_cancel <- bp1_d + neg1
+    mat_cancel <- as(res_cancel, "dgCMatrix")
+    expect_equal(Matrix::nnzero(mat_cancel), 0)
+    expect_equal(dim(mat_cancel), dim(m1))
+
+    # Unsorted inputs: OrderRows sorts
+    perm <- rev(seq_len(nrow(m1)))
+    res_perm <- bp1[perm, ] + bp2[perm, ]
+    expect_equal(as(res_perm, "dgCMatrix"), unname((m1 + m2)[perm, ]))
 })
