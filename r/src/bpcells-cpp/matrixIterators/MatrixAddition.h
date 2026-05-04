@@ -185,6 +185,18 @@ template <typename T> class MatrixAddition : public MatrixLoader<T> {
         return left.vecMultiplyLeft(v, user_interrupt) +
                right.vecMultiplyLeft(v, user_interrupt);
     }
+    Eigen::MatrixXd denseMultiplyRight(
+        const Eigen::Map<Eigen::MatrixXd> B, std::atomic<bool> *user_interrupt = NULL
+    ) override {
+        return left.denseMultiplyRight(B, user_interrupt) +
+               right.denseMultiplyRight(B, user_interrupt);
+    }
+    Eigen::MatrixXd denseMultiplyLeft(
+        const Eigen::Map<Eigen::MatrixXd> B, std::atomic<bool> *user_interrupt = NULL
+    ) override {
+        return left.denseMultiplyLeft(B, user_interrupt) +
+               right.denseMultiplyLeft(B, user_interrupt);
+    }
     // Linearity of sums (distribution over addition):
     //     rowSums(A+B) = rowSums(A) + rowSums(B) 
     //     colSums(A+B) = colSums(A) + colSums(B) 

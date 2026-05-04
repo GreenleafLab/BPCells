@@ -752,27 +752,6 @@ setMethod("+", signature(e1 = "numeric", e2 = "IterableMatrix"), function(e1, e2
   e2 <- wrapMatrix("TransformScaleShift", convert_matrix_type(e2, "double"))
   e2 + e1
 })
-setMethod("+", signature(e1 = "IterableMatrix", e2 = "IterableMatrix"), function(e1, e2) {
-  if (e1@transpose != e2@transpose) stop("Cannot add matrices with different internal transpose states.\nPlease use transpose_storage_order().")
-  if (e1@transpose) {
-    return(t(t(e1) + t(e2)))
-  }
-
-  assert_true(nrow(e1) == nrow(e2) && ncol(e1) == ncol(e2))
-
-  # If types are mismatched, default to double precision for both
-  type_e1 <- matrix_type(e1)
-  type_e2 <- matrix_type(e2)
-  if (type_e1 != type_e2 && type_e1 != "double") e1 <- convert_matrix_type(e1, "double")
-  if (type_e1 != type_e2 && type_e2 != "double") e2 <- convert_matrix_type(e2, "double")
-
-  dim <- c(nrow(e1), ncol(e1))
-  dimnames <- list(
-    merge_dimnames(rownames(e1), rownames(e2), "+", "row"),
-    merge_dimnames(colnames(e1), colnames(e2), "+", "column")
-  )
-  new("MatrixAddition", left = e1, right = e2, transpose = FALSE, dim = dim, dimnames = dimnames)
-})
 # Note: we skip numeric / IterableMatrix as it would result in a lot of infinities for dividing by 0.
 #' @describeIn IterableMatrix-methods Divide by a constant, or divide rows by a vector length nrow(mat)
 #' @examples
