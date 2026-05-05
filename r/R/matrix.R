@@ -500,6 +500,11 @@ setMethod("+", signature(e1 = "IterableMatrix", e2 = "IterableMatrix"), function
   new("MatrixAddition", left = e1, right = e2, transpose = FALSE, dim = dim, dimnames = dimnames)
 })
 
+# Element-wise matrix subtraction via MatrixAddition
+setMethod("-", signature(e1 = "IterableMatrix", e2 = "IterableMatrix"), function(e1, e2) {
+  e1 + (-1 * e2)
+})
+
 # Subsetting on MatrixAddition
 setMethod("[", "MatrixAddition", function(x, i, j, ...) {
   if (missing(x)) stop("x is missing in matrix selection")
