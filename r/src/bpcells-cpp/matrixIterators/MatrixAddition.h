@@ -135,27 +135,27 @@ template <typename T> class MatrixAddition : public MatrixLoader<T> {
                 loaded += take;
                 if (r_idx >= r_cap) refill(right, r_idx, r_cap, r_done);
             } else {
-                uint32_t lr = left.rowData()[l_idx];
-                uint32_t rr = right.rowData()[r_idx];
-                if (lr < rr) {
-                    row_buffer[loaded] = lr;
-                    val_buffer[loaded] = left.valData()[l_idx];
-                    loaded++;
-                    l_idx++;
-                } else if (lr > rr) {
-                    row_buffer[loaded] = rr;
-                    val_buffer[loaded] = right.valData()[r_idx];
-                    loaded++;
-                    r_idx++;
-                } else {
-                    T sum = left.valData()[l_idx] + right.valData()[r_idx];
-                    if (sum != 0) {
-                        row_buffer[loaded] = lr;
-                        val_buffer[loaded] = sum;
-                        loaded++;
-                    }
-                    l_idx++;
-                    r_idx++;
+                const uint32_t *lr = left.rowData();
+                const uint32_t *rr = right.rowData();
+                const T *lv = left.valData();
+                const T *rv = right.valData();
+                while (loaded < max_load_size && l_idx < l_cap && r_idx < r_cap) {
+                    uint32_t lr_v = lr[l_idx];
+                    uint32_t rr_v = rr[r_idx];
+                    T lv_v = lv[l_idx];
+                    T rv_v = rv[r_idx];
+
+                    bool l_pick = lr_v <= rr_v;
+                    bool r_pick = lr_v >= rr_v;
+                    uint32_t out_row = l_pick ? lr_v : rr_v;
+                    T out_val = l_pick ? (r_pick ? lv_v + rv_v : lv_v) : rv_v;
+
+                    bool emit = (lr_v != rr_v) | (out_val != T(0));
+                    row_buffer[loaded] = out_row;
+                    val_buffer[loaded] = out_val;
+                    loaded += emit;
+                    l_idx += l_pick;
+                    r_idx += r_pick;
                 }
                 if (!l_done && l_idx >= l_cap) refill(left, l_idx, l_cap, l_done);
                 if (!r_done && r_idx >= r_cap) refill(right, r_idx, r_cap, r_done);
