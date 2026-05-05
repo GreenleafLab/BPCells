@@ -921,7 +921,9 @@ test_that("Generic methods work", {
     rbind_uint32_t = convert_matrix_type(mi, "uint32_t")  %>% {rbind2(.[1:2, ], .[3:nrow(m)])},
     cbind_uint32_t = convert_matrix_type(mi, "uint32_t")  %>% {cbind2(.[, 1:2], .[, 3:ncol(m)])},
     rbind_float = convert_matrix_type(mi, "float")  %>% {rbind2(.[1:2, ], .[3:nrow(m)])},
-    cbind_float = convert_matrix_type(mi, "float")  %>% {cbind2(.[, 1:2], .[, 3:ncol(m)])}
+    cbind_float = convert_matrix_type(mi, "float")  %>% {cbind2(.[, 1:2], .[, 3:ncol(m)])},
+    add = 0.5 * (mi + mi),
+    subtract = (mi * 2) - mi
   )
 
   for (i in names(ident_transforms)) {
@@ -936,7 +938,7 @@ test_that("Generic methods work", {
     expect_identical(rowSums(trans), rowSums(m))
     expect_identical(colSums(trans), colSums(m))
 
-    if (i %in% c("shift_scale_1", "shift_scale_2")) {
+    if (i %in% c("shift_scale_1", "shift_scale_2", "add", "subtract")) {
       expect_identical(as.matrix(as(trans, "dgCMatrix")), as.matrix(m))
     } else {
       expect_identical(as(trans, "dgCMatrix"), m)

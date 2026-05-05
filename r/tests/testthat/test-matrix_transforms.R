@@ -397,3 +397,24 @@ test_that("matrix addition works", {
     res_perm <- bp1[perm, ] + bp2[perm, ]
     expect_equal(as(res_perm, "dgCMatrix"), unname((m1 + m2)[perm, ]))
 })
+
+test_that("matrix subtraction works", {
+    set.seed(125124)
+    m1 <- generate_sparse_matrix(20, 10, max_val=1e5)
+    m2 <- generate_sparse_matrix(20, 10, max_val=1e5)
+
+    bp1 <- as(m1, "IterableMatrix")
+    bp2 <- as(m2, "IterableMatrix")
+
+    # Basic subtraction
+    expect_equal(as(bp1 - bp2, "dgCMatrix"), m1 - m2)
+
+    # Zero cancellation: A - A emits no explicit zeros
+    res_self <- as(bp1 - bp1, "dgCMatrix")
+    expect_equal(Matrix::nnzero(res_self), 0)
+    expect_equal(dim(res_self), dim(m1))
+
+    # Transpose: mismatch errors
+    bp1_t <- t(as(t(m1), "IterableMatrix"))
+    expect_error(bp1 - bp1_t)
+})
